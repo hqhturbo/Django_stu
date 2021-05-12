@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>成绩</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <h1 align="center" style="font-family: 仿宋">{{ request.session.s.name }}<a href="{% url 'bbrokenline' %}" style="text-decoration: none;color: #ff0000;">成绩分布</a>    <a
+            style="text-decoration: none;color: #ff0000;" href="{% url 'download' %}">下载</a></h1>
+    <table class="table table-striped">
+        <tr align="center">
+            <td>科目</td>
+            {% for c in kemu %}
+                <td align="center"><a href="{% url 'brokenline' c_id=c.id %}">{{ c.name }}</a></td>
+            {% endfor %}
+        </tr>
+
+        <tr align="center">
+            {% for i in clist %}
+                <tr align="center">
+                    <td>第{{ forloop.counter }}学期</td>
+                    {% for s in i %}
+                        <td>{{ s }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tr>
+    </table>
+<h1 style="color: red; font-family: 仿宋" align="center">未及格科目及成绩</h1>
+    <table style="width: 40%;text-align: center" align="center" class="table table-bordered table-striped">
+        <tr>
+            <td>科目</td>
+            <td>成绩</td>
+            <td>学期</td>
+        </tr>
+{#        {% for w in cheng_dict.values %}#}
+{#            {% for a in w %}#}
+{#            <tr>#}
+{#                <td>{{ a.c_id.name }}</td>#}
+{#                <td>{{ a.cheng }}</td>#}
+{#                <td>{{ a.x_id.xueqi }}</td>#}
+{#            </tr>#}
+{#            {% endfor %}#}
+{#            #}
+{#        {% endfor %}#}
+    {% for c in contacts %}
+        <tr>
+            <td>{{ c.c_id.name }}</td>
+            <td>{{ c.cheng }}</td>
+            <td>{{ c.x_id.xueqi }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    <div class="pagination">
+                <span class="step-links">
+                    {% if contacts.has_previous %}
+                        <a href="?page=1">&laquo; 第一页</a>
+                        <a href="?page={{ contacts.previous_page_number }}">上一页</a>
+                    {% endif %}
+
+                    <span class="current">
+                        页数 {{ contacts.number }} / {{ contacts.paginator.num_pages }}.
+                    </span>
+
+                    {% if contacts.has_next %}
+                        <a href="?page={{ contacts.next_page_number }}">下一页</a>
+                        <a href="?page={{ contacts.paginator.num_pages }}">最后一页 &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+
+</body>
+</html>

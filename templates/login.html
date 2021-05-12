@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生登录</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<form action="" method="post">
+    <table align="center" style="text-align: center ;width: 15%; margin-top: 10%; font-family: 仿宋" class="table table-bordered table-striped">
+        <tr>
+            <td colspan="2"><h1>学生登录</h1></td>
+        </tr>
+    <tr>
+        <td>学号</td>
+        <td><input type="text" name="stuNumber"></td>
+    </tr>
+    <tr>
+        <td>姓名</td>
+        <td><input type="text" name="stuName"></td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <button>登录</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'teacherlogin' %}">教师登录</a>
+        </td>
+    </tr>
+    </table>
+</form>
+</body>
+</html>
