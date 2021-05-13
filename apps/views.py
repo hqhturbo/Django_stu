@@ -290,24 +290,24 @@ def show_teacher(request):
         "contacts":contacts
     })
 
-def insert_data(request):
-    from random import randint
-    stu_list = Student.objects.all()
-    for stu in stu_list:
-        # if stu.score_set.all():
-        #     continue
-        subject_list = ['Python', 'C', 'C#', 'C++', 'Java', 'JavaScript', 'PHP', 'VBS', '易语言']
-        for subject in subject_list:
-            if calss.objects.filter(name=subject).first():
-                continue
-            calss.objects.create(name=subject)
-        time_list = ['第一学期', '第二学期', '第三学期', '第四学期']
-        for time in time_list:
-            if xueqi.objects.filter(xueqi=time).first():
-                continue
-            xueqi.objects.create(xueqi=time)
-        for i in range(1,5):
-            for j in range(1,10):
-                chengji.objects.create(cheng=randint(1,100), s_id_id=stu.id, c_id_id=j, x_id_id=i)
-    return HttpResponse('Success')
+# def insert_data(request):
+#     from random import randint
+#     stu_list = Student.objects.all()
+#     for stu in stu_list:
+#         # if stu.score_set.all():
+#         #     continue
+#         subject_list = ['Python', 'C', 'C#', 'C++', 'Java', 'JavaScript', 'PHP', 'VBS', '易语言']
+#         for subject in subject_list:
+#             if calss.objects.filter(name=subject).first():
+#                 continue
+#             calss.objects.create(name=subject)
+#         time_list = ['第一学期', '第二学期', '第三学期', '第四学期']
+#         for time in time_list:
+#             if xueqi.objects.filter(xueqi=time).first():
+#                 continue
+#             xueqi.objects.create(xueqi=time)
+#         for i in range(1,5):
+#             for j in range(1,10):
+#                 chengji.objects.create(cheng=randint(1,100), s_id_id=stu.id, c_id_id=j, x_id_id=i)
+#     return HttpResponse('Success')
 
