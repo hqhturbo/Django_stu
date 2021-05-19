@@ -7,6 +7,7 @@ import xlwt
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import render
 
+# 学生登录
 def login(request):
     if request.method == "GET":
         return render(request,"login.html")
@@ -16,26 +17,31 @@ def login(request):
         s = Student.objects.filter(number=stuNumber,name=stuName).first()
         # sid = s.id
         if s:
-             s = request.session['s'] = s
+             request.session['s'] = s
              return redirect("show")
         else:
             return HttpResponse("学号或姓名错误")
 
+# 展示全部成绩   主要练习分页功能
 def listing(request):
-    chengji_list = chengji.objects.all()
+    # 查询全部
+    chengji_list = Chengji.objects.all()
     # print(chengji_list)
-    paginator = Paginator(chengji_list, 20) # Show 25 contacts per page
 
+    # 分页
+    paginator = Paginator(chengji_list, 20) # Show 25 contacts per page
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
     return render(request, 'list.html', {'contacts': contacts})
 
+# 展示该学生各科成绩
 def show(request):
     stu_1 = Student.objects.filter(id=request.session['s'].id).first()
     clist = stu_1.chengji_set.all()
     # print(stu_1,clist)
     cheng_list = []
     cheng_dict = {}
+    # 循环成绩 查询分数小于六十的科目
     for i in clist:
         if int(i.cheng) < 60:
             cheng_list.append(i)
@@ -50,10 +56,13 @@ def show(request):
         for a in i:
             cheng_li.append(a)
     # print(cheng_li)
+
+    # 分页
     paginator = Paginator(cheng_li, 5)  # Show 25 contacts per page
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
 
+    # 查询九科所有成绩 存入session中
     sub_dict={}
     for i in range(1,10):
         chen_list=[]
@@ -61,11 +70,10 @@ def show(request):
             if chen.c_id_id == i:
                 chen_list.append(chen.cheng)
         sub_dict['sub_{}'.format(i)]=chen_list
-    sub_dict = request.session['sub_dict'] = sub_dict
+    request.session['sub_dict'] = sub_dict
+    # 查询科目名称
 
-    calss_list=[]
-    for ca in calss.objects.all():
-        calss_list.append(ca.name)
+    # 将个学期成绩添加到列表中
     first=[]
     second=[]
     third=[]
@@ -81,7 +89,7 @@ def show(request):
             fourth.append(c.cheng)
     score_list = [first,second,third,fourth]
     # print(score_list)
-    kemu = calss.objects.all()
+    kemu = Calss.objects.all()
 
     return render(request,'show.html',{
         "clist":score_list,
@@ -89,16 +97,20 @@ def show(request):
         "contacts":contacts
     })
 
+# 单一科目折线图
 def brokenline(request,c_id):
+    # 查询所有学期
     x_data=[]
-    xue = xueqi.objects.all()
+    xue = Xueqi.objects.all()
     for x in xue:
         x_data.append(x.xueqi)
-    ke = calss.objects.filter(id=c_id).first()
-    cheng =  chengji.objects.filter(s_id_id=request.session['s'].id, c_id_id=c_id)
+    # 条件查询 根据选择科目查询该科成绩
+    ke = Calss.objects.filter(id=c_id).first()
+    cheng =  Chengji.objects.filter(s_id_id=request.session['s'].id, c_id_id=c_id)
     y_data=[]
     for c in cheng:
         y_data.append(c.cheng)
+    # 折线图
     c = (
         Line()
             .set_global_opts(
@@ -122,13 +134,17 @@ def brokenline(request,c_id):
     )
     return HttpResponse(c.render_embed())
 
+# 所有成绩折线图
 def bbrokenline(request):
+    # 查询所有学期
     x_data = []
-    xue = xueqi.objects.all()
+    xue = Xueqi.objects.all()
     for x in xue:
         x_data.append(x.xueqi)
+    # 获取session中所有成绩的字典
     sub_dict = request.session['sub_dict']
     # print(sub_dict)
+    # 九科成绩折线图
     c = (
         Line()
         .add_xaxis(xaxis_data=x_data)
@@ -191,6 +207,7 @@ def bbrokenline(request):
     )
     return HttpResponse(c.render_embed())
 
+# 下载
 def download(request):
     # 设置HTTPResponse的类型
     response = HttpResponse(content_type='applicationnd.ms-excel')
@@ -229,7 +246,7 @@ def download(request):
     # 写入数据
     data_row = 1
     # UserTable.objects.all()这个是查询条件,可以根据自己的实际需求做调整.
-    s = chengji.objects.filter(s_id=request.session['s'].id)
+    s = Chengji.objects.filter(s_id=request.session['s'].id)
 
     for i in s:
         sheet.write(data_row, 0, i.c_id.name)
@@ -245,6 +262,7 @@ def download(request):
     response.write(output.getvalue())
     return response
 
+# 教师登录
 def teacherlogin(request):
     if request.method=="GET":
         return render(request,'teacherlogin.html')
@@ -253,12 +271,13 @@ def teacherlogin(request):
         teaName = request.POST.get("teaName")
         t = Teacher.objects.filter(number=teaNumber, name=teaName).first()
         if t:
-            t = request.session['t'] = t
+            request.session['t'] = t
             # return HttpResponse('登录成功')
             return redirect("show_teacher")
         else:
             return HttpResponse("工号或姓名错误")
 
+# 展示所有学生所有成绩
 def show_teacher(request):
     tea_1 = Teacher.objects.filter(id=request.session['t'].id).first()
     # print(tea_1)
@@ -266,6 +285,7 @@ def show_teacher(request):
     # print(gg)
     stu_li = []
     chenji = []
+    # 查询此老师所带班级
     for g in gg:
         if g.t_id_id == tea_1.id:
             # print(g.classname)
@@ -273,16 +293,19 @@ def show_teacher(request):
             stu_li.append(Stu)
             # print('llllllll',stu_li)
     # print(stu_li)
+    # 查询班级内所有学生成绩
     for stu in stu_li:
         for s in stu:
-            chen = chengji.objects.filter(s_id=s).all()
+            chen = Chengji.objects.filter(s_id=s).all()
             chenji.append(chen)
         # print('-------------',s)
     # print(chenji)
+    # 分页
     paginator = Paginator(chenji, 4)
     page = request.GET.get('page')
     contacts = paginator.get_page(page)
-    kemu = calss.objects.all()
+    # 查询所有科目
+    kemu = Calss.objects.all()
     li = [1,2,3,4]
     return render(request,'teachershow.html',{
         'kemu':kemu,
@@ -290,7 +313,7 @@ def show_teacher(request):
         "contacts":contacts
     })
 
-
+# 自动添加数据  不可用
 # def insert_data(request):
 #     from random import randint
 #     stu_list = Student.objects.all()
@@ -299,16 +322,15 @@ def show_teacher(request):
 #         #     continue
 #         subject_list = ['Python', 'C', 'C#', 'C++', 'Java', 'JavaScript', 'PHP', 'VBS', '易语言']
 #         for subject in subject_list:
-#             if calss.objects.filter(name=subject).first():
+#             if Calss.objects.filter(name=subject).first():
 #                 continue
-#             calss.objects.create(name=subject)
+#             Calss.objects.create(name=subject)
 #         time_list = ['第一学期', '第二学期', '第三学期', '第四学期']
 #         for time in time_list:
-#             if xueqi.objects.filter(xueqi=time).first():
+#             if Xueqi.objects.filter(xueqi=time).first():
 #                 continue
-#             xueqi.objects.create(xueqi=time)
+#             Xueqi.objects.create(xueqi=time)
 #         for i in range(1,5):
 #             for j in range(1,10):
-#                 chengji.objects.create(cheng=randint(1,100), s_id_id=stu.id, c_id_id=j, x_id_id=i)
+#                 Chengji.objects.create(cheng=randint(1,100), s_id_id=stu.id, c_id_id=j, x_id_id=i)
 #     return HttpResponse('Success')
-

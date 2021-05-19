@@ -13,17 +13,17 @@ class Student(models.Model):
     name = models.CharField(max_length=20)
     g_id = models.ForeignKey(Grade,on_delete=models.CASCADE,null=True)
 
-class calss(models.Model):
+class Calss(models.Model):
     name = models.CharField(max_length=20)
 
-class xueqi(models.Model):
+class Xueqi(models.Model):
     xueqi = models.CharField(max_length=20,null=True)
 
-class chengji(models.Model):
+class Chengji(models.Model):
     cheng = models.IntegerField(null=True)
     s_id = models.ForeignKey(Student,on_delete=models.CASCADE)
-    c_id = models.ForeignKey(calss,on_delete=models.CASCADE)
-    x_id = models.ForeignKey(xueqi,on_delete=models.CASCADE,null=True)
+    c_id = models.ForeignKey(Calss,on_delete=models.CASCADE)
+    x_id = models.ForeignKey(Xueqi,on_delete=models.CASCADE,null=True)
 
 class Timu(models.Model):
     title = models.CharField(max_length=100)
@@ -32,7 +32,7 @@ class Timu(models.Model):
     C = models.CharField(max_length=50)
     D = models.CharField(max_length=50)
     correct = models.CharField(max_length=5)
-    c_id = models.ForeignKey(calss,on_delete=models.CASCADE)
+    c_id = models.ForeignKey(Calss,on_delete=models.CASCADE)
 
 class Mistakes(models.Model):
     s_id = models.ForeignKey(Student, on_delete=models.CASCADE)
