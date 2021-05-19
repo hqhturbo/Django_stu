@@ -290,6 +290,7 @@ def show_teacher(request):
         "contacts":contacts
     })
 
+
 # def insert_data(request):
 #     from random import randint
 #     stu_list = Student.objects.all()

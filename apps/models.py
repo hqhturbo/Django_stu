@@ -25,3 +25,16 @@ class chengji(models.Model):
     c_id = models.ForeignKey(calss,on_delete=models.CASCADE)
     x_id = models.ForeignKey(xueqi,on_delete=models.CASCADE,null=True)
 
+class Timu(models.Model):
+    title = models.CharField(max_length=100)
+    A = models.CharField(max_length=50)
+    B = models.CharField(max_length=50)
+    C = models.CharField(max_length=50)
+    D = models.CharField(max_length=50)
+    correct = models.CharField(max_length=5)
+    c_id = models.ForeignKey(calss,on_delete=models.CASCADE)
+
+class Mistakes(models.Model):
+    s_id = models.ForeignKey(Student, on_delete=models.CASCADE)
+    ti_id = models.ForeignKey(Timu, on_delete=models.CASCADE)
+
