@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>测试</title>
+    <title>测试选择</title>
     <link rel="stylesheet" href="../static/bootstrap.css">
     <link rel="stylesheet" href="../static/bootstrap-theme.css">
     <script src="../static/jquery-3.2.1.min.js"></script>
@@ -10,7 +10,7 @@
 </head>
 <body>
 <form action="" method="post"></form>
-<h1>{{ request.session.s.name }} 请开始考试</h1>
+<h1>{{ request.session.s.name }} 请选择考试内容</h1>
 <table>
     <h3>请选择科目</h3>
     {% for c in class %}
@@ -32,7 +32,7 @@
             <input type="radio" value="3" name="tishu">3道题
         </td>
     </tr>
-    <tr><td><a href="{% url 'ceshi' %}">开始测试</a></td></tr>
+    <tr><td><a href="{% url 'ceshi' %}">开始测试</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'mistakes' %}">历史错题</a></td></tr>
 </table>
 </body>
 </html>

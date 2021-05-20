@@ -99,7 +99,6 @@ def show(request):
 
 # 习题选择
 def exam(request):
-    # return HttpResponse('测试')
     if request.method=='GET':
         calss = Calss.objects.all()
         return render(request,'exam.html',{
@@ -128,10 +127,20 @@ def ceshi(request):
             t = Timu.objects.filter(id=int(info[0])).first()
             if t.correct == info[1]:
                 score += 2
+            else:
+                Mistakes.objects.create(s_id_id = request.session['s'].id,ti_id = t)
             print("你的答案：", info[1], "正确答案：", t.correct)
         print(info_list)
         return HttpResponse(score)
 
+
+def mistakes(request):
+    mis = Mistakes.objects.filter(s_id = request.session['s'].id).all()
+    # for m in mis:
+    #     print(m.ti_id.title)
+    return render(request,'mistakes.html',{
+        'mis':mis
+    })
 # 单一科目折线图
 def brokenline(request,c_id):
     # 查询所有学期
@@ -369,4 +378,3 @@ def show_teacher(request):
 #             for j in range(1,10):
 #                 Chengji.objects.create(cheng=randint(1,100), s_id_id=stu.id, c_id_id=j, x_id_id=i)
 #     return HttpResponse('Success')
-

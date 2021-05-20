@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>测试</title>
 </head>
 <body>
 <form action="" method="post">
+<h1>{{ request.session.s.name }} 请开始考试</h1>
     <table>
         {% for title in title_list %}
             <tr>
