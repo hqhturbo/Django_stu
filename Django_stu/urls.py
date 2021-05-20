@@ -22,6 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login),
     path('show/', views.show, name="show"),
+    path('exam/', views.exam, name="exam"),
+    path('ceshi/', views.ceshi, name="ceshi"),
     # path('insert_data/', views.insert_data),
     path('brokenline/<c_id>', views.brokenline,name='brokenline'),
     path('bbrokenline/', views.bbrokenline,name='bbrokenline'),

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <link rel="stylesheet" href="../static/bootstrap.css">
+    <link rel="stylesheet" href="../static/bootstrap-theme.css">
+    <script src="../static/jquery-3.2.1.min.js"></script>
+    <script src="../static/bootstrap.js"></script>
+</head>
+<body>
+<form action="" method="post"></form>
+<h1>{{ request.session.s.name }} 请开始考试</h1>
+<table>
+    <h3>请选择科目</h3>
+    {% for c in class %}
+        <tr>
+            <td>
+                <input name="name" type="checkbox" value="{{ c.id }}">{{ c.name }}
+            </td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td>
+            <h3>请选择题数</h3>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <input type="radio" value="1" name="tishu">1道题
+            <input type="radio" value="2" name="tishu">2道题
+            <input type="radio" value="3" name="tishu">3道题
+        </td>
+    </tr>
+    <tr><td><a href="{% url 'ceshi' %}">开始测试</a></td></tr>
+</table>
+</body>
+</html>

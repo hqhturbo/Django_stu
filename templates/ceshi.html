@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="" method="post">
+    <table>
+        {% for title in title_list %}
+            <tr>
+                <td colspan="4">{{ title.title }}</td>
+            </tr>
+            <tr>
+                <td><input type="radio" name="{{ title.id }}" value="{{ title.id }},A">{{ title.A }}</td>
+                <td><input type="radio" name="{{ title.id }}" value="{{ title.id }},B">{{ title.B }}</td>
+                <td><input type="radio" name="{{ title.id }}" value="{{ title.id }},C">{{ title.C }}</td>
+                <td><input type="radio" name="{{ title.id }}" value="{{ title.id }},D">{{ title.D }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td><button>提交</button></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
