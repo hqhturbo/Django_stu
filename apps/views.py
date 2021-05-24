@@ -101,9 +101,15 @@ def show(request):
 def exam(request):
     if request.method=='GET':
         calss = Calss.objects.all()
+        mis = Mistakes.objects.filter(s_id_id = request.session['s'].id).all()
+        mis = len(mis)
         return render(request,'exam.html',{
-            'class':calss
+            'class':calss,
+            'mis':mis
         })
+
+from django.db import connection
+cursor = connection.cursor()
 
 # 习题练习
 def ceshi(request):
@@ -111,13 +117,14 @@ def ceshi(request):
     id_list = []
     for ti in title_list:
         id_list.append(ti.id)
-    print(id_list)
+    # print(id_list)
     if request.method == "GET":
         return render(request, "ceshi.html", {
             "title_list": title_list
         })
     else:
         info_list = []
+        li = []
         score = 0
         for id in id_list:
             info = request.POST.get(str(id))
@@ -128,19 +135,57 @@ def ceshi(request):
             if t.correct == info[1]:
                 score += 2
             else:
-                Mistakes.objects.create(s_id_id = request.session['s'].id,ti_id = t)
-            print("你的答案：", info[1], "正确答案：", t.correct)
-        print(info_list)
+                li.append(t)
+                # print(li)
+        if len(li) == 0:
+            return HttpResponse(score)
+        else:
+            mis = Mistakes.objects.filter(s_id = request.session['s'].id).all()
+            for i in li:
+                if len(mis) == 0:
+                    Mistakes.objects.create(s_id_id=request.session['s'].id, ti_id=i)
+                else:
+                    for m in mis:
+                        if m.ti_id_id == i.id:
+                            continue
+                        else:
+                            Mistakes.objects.create(s_id_id = request.session['s'].id,ti_id = i)
+                            m_all = cursor.execute("""DELETE FROM apps_mistakes
+	                                                    WHERE id NOT IN (
+		                                                SELECT temp.min_id FROM (
+			                                            SELECT MIN(id) min_id FROM apps_mistakes
+			                                            GROUP BY s_id_id,ti_id_id)AS temp
+	                                            )""")
+                            m_all = cursor.fetchall()
+            # print("你的答案：", info[1], "正确答案：", t.correct)
+        # print(info_list)
         return HttpResponse(score)
 
-
+# 错题
 def mistakes(request):
-    mis = Mistakes.objects.filter(s_id = request.session['s'].id).all()
-    # for m in mis:
-    #     print(m.ti_id.title)
-    return render(request,'mistakes.html',{
-        'mis':mis
-    })
+    mis = Mistakes.objects.filter(s_id=request.session['s'].id).all()
+    id_list = []
+    for m in mis:
+        id_list.append(m.ti_id)
+    print(id_list)
+    if request.method == 'GET':
+        # for m in mis:
+        #     print(m.ti_id.title)
+        return render(request,'mistakes.html',{
+            'mis':mis
+        })
+    else:
+        for id in id_list:
+            info = request.POST.get(str(id.id))
+            info = info.split(',')
+            t = Timu.objects.filter(id=int(info[0])).first()
+            print(info[1])
+            if t.correct == info[1]:
+                m = Mistakes.objects.filter(ti_id = t,s_id = request.session['s'].id).first()
+                print(m)
+                m.delete()
+    return redirect('exam')
+
 # 单一科目折线图
 def brokenline(request,c_id):
     # 查询所有学期
