@@ -9,9 +9,9 @@
     <script src="../static/bootstrap.js"></script>
 </head>
 <body>
-<form action="" method="post"></form>
-<h1>{{ request.session.s.name }} 请选择考试内容</h1>
-<table>
+<form action="" method="post">
+<h1 class="alert alert-info">{{ request.session.s.name }} 请选择考试内容</h1>
+<table class="table tab-content table-hover">
     <h3>请选择科目</h3>
     {% for c in class %}
         <tr>
@@ -27,12 +27,13 @@
     </tr>
     <tr>
         <td>
-            <input type="radio" value="1" name="tishu">1道题
-            <input type="radio" value="2" name="tishu">2道题
-            <input type="radio" value="3" name="tishu">3道题
+            <input type="radio" value="5" name="tishu">5道题
+            <input type="radio" value="6" name="tishu">6道题
+            <input type="radio" value="7" name="tishu">7道题
         </td>
     </tr>
-    <tr><td><a href="{% url 'ceshi' %}">开始测试</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="{% url 'mistakes' %}">历史错题</a><span>共{{ mis }}道</span></td></tr>
+    <tr><td><button>开始测试</button>&nbsp;&nbsp;&nbsp;&nbsp;<a class="btn btn-danger" href="{% url 'mistakes' %}">历史错题</a><span>共{{ mis }}道</span></td></tr>
+</form>
 </table>
 </body>
 </html>

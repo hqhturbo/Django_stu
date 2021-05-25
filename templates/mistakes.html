@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>错题</title>
+    <link rel="stylesheet" href="../static/bootstrap.css">
+    <link rel="stylesheet" href="../static/bootstrap-theme.css">
+    <script src="../static/jquery-3.2.1.min.js"></script>
+    <script src="../static/bootstrap.js"></script>
 </head>
 <body>
 <form action="" method="post">
-    <table>
+    <table class="table tab-content table-hover">
         {% for mi in mis %}
             <tr>
-                <td colspan="4">{{ mi.ti_id.title }}</td>
+                <td colspan="4">第{{ forloop.counter }}题 &nbsp;&nbsp;&nbsp;&nbsp;{{ mi.ti_id.title }}</td>
             </tr>
             <tr>
                 <td><input type="radio" name="{{ mi.ti_id.id }}" value="{{ mi.ti_id.id }},A">{{ mi.ti_id.A }}</td>
@@ -18,8 +22,8 @@
                 <td><input type="radio" name="{{ mi.ti_id.id }}" value="{{ mi.ti_id.id }},D">{{ mi.ti_id.D }}</td>
             </tr>
         {% endfor %}
-        <tr>
-            <td><button>提交</button></td>
+        <tr align="center">
+            <td colspan="4"><button class="btn btn-info">提交</button></td>
         </tr>
     </table>
 </form>

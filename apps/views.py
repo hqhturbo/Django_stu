@@ -100,56 +100,110 @@ def show(request):
 # 习题选择
 def exam(request):
     if request.method=='GET':
+        # 查询所有科目
         calss = Calss.objects.all()
+        # 错题表查询
         mis = Mistakes.objects.filter(s_id_id = request.session['s'].id).all()
         mis = len(mis)
         return render(request,'exam.html',{
             'class':calss,
             'mis':mis
         })
+    else:
+        # 获取多选框
+        e_list = request.POST.getlist('name')
+        num = request.POST.get('tishu')
+        # print(num)
+        # print(e_list)
+        request.session['num'] = num
+        request.session['e_list'] = e_list
+        return redirect('ceshi')
 
+# 引入原生sql
 from django.db import connection
 cursor = connection.cursor()
 
 # 习题练习
 def ceshi(request):
-    title_list = Timu.objects.all()
-    id_list = []
-    for ti in title_list:
-        id_list.append(ti.id)
-    # print(id_list)
+    # title_list = Timu.objects.all()
+    # 获取存入session中的值
+    e_list = request.session['e_list']
+    num = request.session['num']
+    # 判断
+    if len(e_list) == 1:
+        a = e_list[0]
+        # print(a)
+        a = '({})'.format(a)
+        # print(a)
+    else:
+        # 转为元组类型
+        a = tuple(e_list)
+        # print(e_list)
+    # 查询
+    ti = Timu.objects.filter(c_id__in=e_list)
+    # print(ti)
+    if ti:
+
+        t_all = cursor.execute("""
+        SELECT * FROM apps_timu WHERE c_id_id IN {} ORDER BY id limit {};
+        """.format(a,num))
+        title_list = cursor.fetchall()
+        # 将值存入session
+        request.session['title_list'] = title_list
+        print(title_list)
+        id_list = []
+        # 循环得到的数据
+        for ti in title_list:
+            # 将数据id添加进列表
+            id_list.append(ti[0])
+        request.session['id_list'] = id_list
+
     if request.method == "GET":
+        # 获取session值传入HTML网页
+        title_list = request.session['title_list']
         return render(request, "ceshi.html", {
             "title_list": title_list
         })
     else:
+        id_list = request.session['id_list']
         info_list = []
         li = []
+        # 定义原始成绩为0
         score = 0
+        # 循环题目id
         for id in id_list:
             info = request.POST.get(str(id))
             # print(info)
+            # 字符串切割
             info = info.split(',')
             info_list.append(info)
+            # 条件查询
             t = Timu.objects.filter(id=int(info[0])).first()
+            # 正确题目成绩计算
             if t.correct == info[1]:
                 score += 2
             else:
+                # 将错误题目添加入列表
                 li.append(t)
                 # print(li)
         if len(li) == 0:
             return HttpResponse(score)
         else:
+            # 错题表查询是否存在错题
             mis = Mistakes.objects.filter(s_id = request.session['s'].id).all()
             for i in li:
                 if len(mis) == 0:
+                    # 将数据添加进错题表
                     Mistakes.objects.create(s_id_id=request.session['s'].id, ti_id=i)
                 else:
                     for m in mis:
+                        # 如果改错题存在于错题表内
                         if m.ti_id_id == i.id:
+                            # 跳出本次循环
                             continue
                         else:
                             Mistakes.objects.create(s_id_id = request.session['s'].id,ti_id = i)
+                            # 删除表内重复错题
                             m_all = cursor.execute("""DELETE FROM apps_mistakes
 	                                                    WHERE id NOT IN (
 		                                                SELECT temp.min_id FROM (
@@ -163,6 +217,7 @@ def ceshi(request):
 
 # 错题
 def mistakes(request):
+    # 查询所有错题
     mis = Mistakes.objects.filter(s_id=request.session['s'].id).all()
     id_list = []
     for m in mis:
@@ -176,13 +231,16 @@ def mistakes(request):
         })
     else:
         for id in id_list:
+            # 获取数据
             info = request.POST.get(str(id.id))
             info = info.split(',')
             t = Timu.objects.filter(id=int(info[0])).first()
             print(info[1])
+            # 如果题目回答正确
             if t.correct == info[1]:
+                # 删除错题库题目
                 m = Mistakes.objects.filter(ti_id = t,s_id = request.session['s'].id).first()
-                print(m)
+                # print(m)
                 m.delete()
     return redirect('exam')
 

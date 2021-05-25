@@ -3,24 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>测试</title>
+    <link rel="stylesheet" href="../static/bootstrap.css">
+    <link rel="stylesheet" href="../static/bootstrap-theme.css">
+    <script src="../static/jquery-3.2.1.min.js"></script>
+    <script src="../static/bootstrap.js"></script>
 </head>
 <body>
 <form action="" method="post">
-<h1>{{ request.session.s.name }} 请开始考试</h1>
-    <table>
+<div class="alert alert-info" role="alert">
+    <h1>{{ request.session.s.name }} 请开始考试</h1>
+</div>
+    <table class="table tab-content table-hover">
         {% for title in title_list %}
             <tr>
-                <td colspan="4">{{ title.title }}</td>
+                <td colspan="4">第{{ forloop.counter }}题 &nbsp;&nbsp;&nbsp;&nbsp;{{ title.1 }}</td>
             </tr>
             <tr>
-                <td><input type="radio" name="{{ title.id }}" value="{{ title.id }},A">{{ title.A }}</td>
-                <td><input type="radio" name="{{ title.id }}" value="{{ title.id }},B">{{ title.B }}</td>
-                <td><input type="radio" name="{{ title.id }}" value="{{ title.id }},C">{{ title.C }}</td>
-                <td><input type="radio" name="{{ title.id }}" value="{{ title.id }},D">{{ title.D }}</td>
+                <td><input type="radio" name="{{ title.0 }}" value="{{ title.0 }},A">{{ title.2 }}</td>
+                <td><input type="radio" name="{{ title.0 }}" value="{{ title.0 }},B">{{ title.3 }}</td>
+                <td><input type="radio" name="{{ title.0 }}" value="{{ title.0 }},C">{{ title.4 }}</td>
+                <td><input type="radio" name="{{ title.0 }}" value="{{ title.0 }},D">{{ title.5 }}</td>
             </tr>
         {% endfor %}
-        <tr>
-            <td><button>提交</button></td>
+        <tr align="center">
+            <td colspan="4"><button class="btn btn-info">提交</button></td>
         </tr>
     </table>
 </form>
