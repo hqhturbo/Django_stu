@@ -11,7 +11,7 @@
  Target Server Version : 80011
  File Encoding         : 65001
 
- Date: 19/05/2021 09:43:00
+ Date: 25/05/2021 20:29:01
 */
 
 SET NAMES utf8mb4;
@@ -25,7 +25,7 @@ CREATE TABLE `apps_calss`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of apps_calss
@@ -51,13 +51,13 @@ CREATE TABLE `apps_chengji`  (
   `s_id_id` int(11) NOT NULL,
   `x_id_id` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `apps_chengji_c_id_id_b4eff4bf_fk_apps_calss_id`(`c_id_id`) USING BTREE,
   INDEX `apps_chengji_s_id_id_2c9b1bde_fk_apps_student_id`(`s_id_id`) USING BTREE,
+  INDEX `apps_chengji_c_id_id_b4eff4bf_fk_apps_calss_id`(`c_id_id`) USING BTREE,
   INDEX `apps_chengji_x_id_id_565ababd_fk_apps_xueqi_id`(`x_id_id`) USING BTREE,
   CONSTRAINT `apps_chengji_c_id_id_b4eff4bf_fk_apps_calss_id` FOREIGN KEY (`c_id_id`) REFERENCES `apps_calss` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `apps_chengji_s_id_id_2c9b1bde_fk_apps_student_id` FOREIGN KEY (`s_id_id`) REFERENCES `apps_student` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `apps_chengji_x_id_id_565ababd_fk_apps_xueqi_id` FOREIGN KEY (`x_id_id`) REFERENCES `apps_xueqi` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1008 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1009 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of apps_chengji
@@ -984,6 +984,30 @@ INSERT INTO `apps_grade` VALUES (2, '二班', 1);
 INSERT INTO `apps_grade` VALUES (3, '三班', 2);
 
 -- ----------------------------
+-- Table structure for apps_mistakes
+-- ----------------------------
+DROP TABLE IF EXISTS `apps_mistakes`;
+CREATE TABLE `apps_mistakes`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `s_id_id` int(11) NOT NULL,
+  `ti_id_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `apps_mistakes_s_id_id_288b29b8_fk_apps_student_id`(`s_id_id`) USING BTREE,
+  INDEX `apps_mistakes_ti_id_id_b2682539_fk_apps_timu_id`(`ti_id_id`) USING BTREE,
+  CONSTRAINT `apps_mistakes_s_id_id_288b29b8_fk_apps_student_id` FOREIGN KEY (`s_id_id`) REFERENCES `apps_student` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `apps_mistakes_ti_id_id_b2682539_fk_apps_timu_id` FOREIGN KEY (`ti_id_id`) REFERENCES `apps_timu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 66 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of apps_mistakes
+-- ----------------------------
+INSERT INTO `apps_mistakes` VALUES (1, 1, 1);
+INSERT INTO `apps_mistakes` VALUES (2, 1, 2);
+INSERT INTO `apps_mistakes` VALUES (3, 1, 3);
+INSERT INTO `apps_mistakes` VALUES (4, 1, 4);
+INSERT INTO `apps_mistakes` VALUES (5, 1, 5);
+
+-- ----------------------------
 -- Table structure for apps_student
 -- ----------------------------
 DROP TABLE IF EXISTS `apps_student`;
@@ -995,7 +1019,7 @@ CREATE TABLE `apps_student`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `apps_student_g_id_id_a048c498_fk_apps_grade_id`(`g_id_id`) USING BTREE,
   CONSTRAINT `apps_student_g_id_id_a048c498_fk_apps_grade_id` FOREIGN KEY (`g_id_id`) REFERENCES `apps_grade` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of apps_student
@@ -1045,6 +1069,48 @@ INSERT INTO `apps_teacher` VALUES (2, '20010202', '杭老师');
 INSERT INTO `apps_teacher` VALUES (3, '20010303', '张老师');
 
 -- ----------------------------
+-- Table structure for apps_timu
+-- ----------------------------
+DROP TABLE IF EXISTS `apps_timu`;
+CREATE TABLE `apps_timu`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `A` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `B` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `C` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `D` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `correct` varchar(5) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `c_id_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `apps_timu_c_id_id_47607463_fk_apps_calss_id`(`c_id_id`) USING BTREE,
+  CONSTRAINT `apps_timu_c_id_id_47607463_fk_apps_calss_id` FOREIGN KEY (`c_id_id`) REFERENCES `apps_calss` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of apps_timu
+-- ----------------------------
+INSERT INTO `apps_timu` VALUES (1, '如果想要将整数转换成字符串，需要用到什么函数?', 'A . num()', 'B . double()', 'C . int()', 'D . str()', 'D', 1);
+INSERT INTO `apps_timu` VALUES (2, '在Python中一个数字占几个字节：', 'A . 0.5个', 'B . 1个', 'C . 2个', 'D . 4个', 'B', 2);
+INSERT INTO `apps_timu` VALUES (3, '正则表达式中使用（ ）来匹配任意数量的字母或数字或下划线或汉字：', 'A . \\w', 'B . \\b', 'C . ^', 'D . \\w*', 'D', 3);
+INSERT INTO `apps_timu` VALUES (4, '小明未开启手机指纹支付方式，需要设置6个数字的微信支付密码，下列哪项是正确的微信支付密码格式：', 'A . [0-9]{1,6}', 'B . [0-6]{0,9}', 'C . [0-9]{6}', 'D . [0-9]{1-6}', 'C', 4);
+INSERT INTO `apps_timu` VALUES (5, '使用已存在的字典作为函数的可变参数，需要：', 'A . 直接使用字典名称作为参数', 'B . 在字典名称前加“*”', 'C . 在字典名称前加“**”', 'D .  在字典内每个元素前加“**”', 'C', 5);
+INSERT INTO `apps_timu` VALUES (6, '如果想要将整数转换成字符串，需要用到什么函数?', 'A . num()', 'B . double()', 'C . int()', 'D . str()', 'D', 1);
+INSERT INTO `apps_timu` VALUES (7, '在Python中一个数字占几个字节：', 'A . 0.5个', 'B . 1个', 'C . 2个', 'D . 4个', 'B', 2);
+INSERT INTO `apps_timu` VALUES (8, '正则表达式中使用（ ）来匹配任意数量的字母或数字或下划线或汉字：', 'A . \\w', 'B . \\b', 'C . ^', 'D . \\w*', 'D', 3);
+INSERT INTO `apps_timu` VALUES (9, '小明未开启手机指纹支付方式，需要设置6个数字的微信支付密码，下列哪项是正确的微信支付密码格式：', 'A . [0-9]{1,6}', 'B . [0-6]{0,9}', 'C . [0-9]{6}', 'D . [0-9]{1-6}', 'C', 4);
+INSERT INTO `apps_timu` VALUES (10, '使用已存在的字典作为函数的可变参数，需要：', 'A . 直接使用字典名称作为参数', 'B . 在字典名称前加“*”', 'C . 在字典名称前加“**”', 'D .  在字典内每个元素前加“**”', 'C', 5);
+INSERT INTO `apps_timu` VALUES (11, '如果想要将整数转换成字符串，需要用到什么函数?', 'A . num()', 'B . double()', 'C . int()', 'D . str()', 'D', 1);
+INSERT INTO `apps_timu` VALUES (12, '在Python中一个数字占几个字节：', 'A . 0.5个', 'B . 1个', 'C . 2个', 'D . 4个', 'B', 2);
+INSERT INTO `apps_timu` VALUES (13, '正则表达式中使用（ ）来匹配任意数量的字母或数字或下划线或汉字：', 'A . \\w', 'B . \\b', 'C . ^', 'D . \\w*', 'D', 3);
+INSERT INTO `apps_timu` VALUES (14, '小明未开启手机指纹支付方式，需要设置6个数字的微信支付密码，下列哪项是正确的微信支付密码格式：', 'A . [0-9]{1,6}', 'B . [0-6]{0,9}', 'C . [0-9]{6}', 'D . [0-9]{1-6}', 'C', 4);
+INSERT INTO `apps_timu` VALUES (15, '使用已存在的字典作为函数的可变参数，需要：', 'A . 直接使用字典名称作为参数', 'B . 在字典名称前加“*”', 'C . 在字典名称前加“**”', 'D .  在字典内每个元素前加“**”', 'C', 5);
+INSERT INTO `apps_timu` VALUES (16, '如果想要将整数转换成字符串，需要用到什么函数?', 'A . num()', 'B . double()', 'C . int()', 'D . str()', 'D', 1);
+INSERT INTO `apps_timu` VALUES (17, '在Python中一个数字占几个字节：', 'A . 0.5个', 'B . 1个', 'C . 2个', 'D . 4个', 'B', 2);
+INSERT INTO `apps_timu` VALUES (18, '正则表达式中使用（ ）来匹配任意数量的字母或数字或下划线或汉字：', 'A . \\w', 'B . \\b', 'C . ^', 'D . \\w*', 'D', 3);
+INSERT INTO `apps_timu` VALUES (19, '小明未开启手机指纹支付方式，需要设置6个数字的微信支付密码，下列哪项是正确的微信支付密码格式：', 'A . [0-9]{1,6}', 'B . [0-6]{0,9}', 'C . [0-9]{6}', 'D . [0-9]{1-6}', 'C', 4);
+INSERT INTO `apps_timu` VALUES (20, '使用已存在的字典作为函数的可变参数，需要：', 'A . 直接使用字典名称作为参数', 'B . 在字典名称前加“*”', 'C . 在字典名称前加“**”', 'D .  在字典内每个元素前加“**”', 'C', 5);
+
+-- ----------------------------
 -- Table structure for apps_xueqi
 -- ----------------------------
 DROP TABLE IF EXISTS `apps_xueqi`;
@@ -1052,7 +1118,7 @@ CREATE TABLE `apps_xueqi`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `xueqi` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of apps_xueqi
@@ -1100,7 +1166,7 @@ CREATE TABLE `auth_permission`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `auth_permission_content_type_id_codename_01ab375a_uniq`(`content_type_id`, `codename`) USING BTREE,
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 56 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of auth_permission
@@ -1133,26 +1199,34 @@ INSERT INTO `auth_permission` VALUES (25, 'Can add calss', 7, 'add_calss');
 INSERT INTO `auth_permission` VALUES (26, 'Can change calss', 7, 'change_calss');
 INSERT INTO `auth_permission` VALUES (27, 'Can delete calss', 7, 'delete_calss');
 INSERT INTO `auth_permission` VALUES (28, 'Can view calss', 7, 'view_calss');
-INSERT INTO `auth_permission` VALUES (29, 'Can add student', 8, 'add_student');
-INSERT INTO `auth_permission` VALUES (30, 'Can change student', 8, 'change_student');
-INSERT INTO `auth_permission` VALUES (31, 'Can delete student', 8, 'delete_student');
-INSERT INTO `auth_permission` VALUES (32, 'Can view student', 8, 'view_student');
-INSERT INTO `auth_permission` VALUES (33, 'Can add xueqi', 9, 'add_xueqi');
-INSERT INTO `auth_permission` VALUES (34, 'Can change xueqi', 9, 'change_xueqi');
-INSERT INTO `auth_permission` VALUES (35, 'Can delete xueqi', 9, 'delete_xueqi');
-INSERT INTO `auth_permission` VALUES (36, 'Can view xueqi', 9, 'view_xueqi');
-INSERT INTO `auth_permission` VALUES (37, 'Can add chengji', 10, 'add_chengji');
-INSERT INTO `auth_permission` VALUES (38, 'Can change chengji', 10, 'change_chengji');
-INSERT INTO `auth_permission` VALUES (39, 'Can delete chengji', 10, 'delete_chengji');
-INSERT INTO `auth_permission` VALUES (40, 'Can view chengji', 10, 'view_chengji');
-INSERT INTO `auth_permission` VALUES (41, 'Can add teacher', 11, 'add_teacher');
-INSERT INTO `auth_permission` VALUES (42, 'Can change teacher', 11, 'change_teacher');
-INSERT INTO `auth_permission` VALUES (43, 'Can delete teacher', 11, 'delete_teacher');
-INSERT INTO `auth_permission` VALUES (44, 'Can view teacher', 11, 'view_teacher');
-INSERT INTO `auth_permission` VALUES (45, 'Can add grade', 12, 'add_grade');
-INSERT INTO `auth_permission` VALUES (46, 'Can change grade', 12, 'change_grade');
-INSERT INTO `auth_permission` VALUES (47, 'Can delete grade', 12, 'delete_grade');
-INSERT INTO `auth_permission` VALUES (48, 'Can view grade', 12, 'view_grade');
+INSERT INTO `auth_permission` VALUES (29, 'Can add grade', 8, 'add_grade');
+INSERT INTO `auth_permission` VALUES (30, 'Can change grade', 8, 'change_grade');
+INSERT INTO `auth_permission` VALUES (31, 'Can delete grade', 8, 'delete_grade');
+INSERT INTO `auth_permission` VALUES (32, 'Can view grade', 8, 'view_grade');
+INSERT INTO `auth_permission` VALUES (33, 'Can add teacher', 9, 'add_teacher');
+INSERT INTO `auth_permission` VALUES (34, 'Can change teacher', 9, 'change_teacher');
+INSERT INTO `auth_permission` VALUES (35, 'Can delete teacher', 9, 'delete_teacher');
+INSERT INTO `auth_permission` VALUES (36, 'Can view teacher', 9, 'view_teacher');
+INSERT INTO `auth_permission` VALUES (37, 'Can add xueqi', 10, 'add_xueqi');
+INSERT INTO `auth_permission` VALUES (38, 'Can change xueqi', 10, 'change_xueqi');
+INSERT INTO `auth_permission` VALUES (39, 'Can delete xueqi', 10, 'delete_xueqi');
+INSERT INTO `auth_permission` VALUES (40, 'Can view xueqi', 10, 'view_xueqi');
+INSERT INTO `auth_permission` VALUES (41, 'Can add timu', 11, 'add_timu');
+INSERT INTO `auth_permission` VALUES (42, 'Can change timu', 11, 'change_timu');
+INSERT INTO `auth_permission` VALUES (43, 'Can delete timu', 11, 'delete_timu');
+INSERT INTO `auth_permission` VALUES (44, 'Can view timu', 11, 'view_timu');
+INSERT INTO `auth_permission` VALUES (45, 'Can add student', 12, 'add_student');
+INSERT INTO `auth_permission` VALUES (46, 'Can change student', 12, 'change_student');
+INSERT INTO `auth_permission` VALUES (47, 'Can delete student', 12, 'delete_student');
+INSERT INTO `auth_permission` VALUES (48, 'Can view student', 12, 'view_student');
+INSERT INTO `auth_permission` VALUES (49, 'Can add mistakes', 13, 'add_mistakes');
+INSERT INTO `auth_permission` VALUES (50, 'Can change mistakes', 13, 'change_mistakes');
+INSERT INTO `auth_permission` VALUES (51, 'Can delete mistakes', 13, 'delete_mistakes');
+INSERT INTO `auth_permission` VALUES (52, 'Can view mistakes', 13, 'view_mistakes');
+INSERT INTO `auth_permission` VALUES (53, 'Can add chengji', 14, 'add_chengji');
+INSERT INTO `auth_permission` VALUES (54, 'Can change chengji', 14, 'change_chengji');
+INSERT INTO `auth_permission` VALUES (55, 'Can delete chengji', 14, 'delete_chengji');
+INSERT INTO `auth_permission` VALUES (56, 'Can view chengji', 14, 'view_chengji');
 
 -- ----------------------------
 -- Table structure for auth_user
@@ -1234,18 +1308,20 @@ CREATE TABLE `django_content_type`  (
   `model` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `django_content_type_app_label_model_76bd3d3b_uniq`(`app_label`, `model`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of django_content_type
 -- ----------------------------
 INSERT INTO `django_content_type` VALUES (1, 'admin', 'logentry');
 INSERT INTO `django_content_type` VALUES (7, 'apps', 'calss');
-INSERT INTO `django_content_type` VALUES (10, 'apps', 'chengji');
-INSERT INTO `django_content_type` VALUES (12, 'apps', 'grade');
-INSERT INTO `django_content_type` VALUES (8, 'apps', 'student');
-INSERT INTO `django_content_type` VALUES (11, 'apps', 'teacher');
-INSERT INTO `django_content_type` VALUES (9, 'apps', 'xueqi');
+INSERT INTO `django_content_type` VALUES (14, 'apps', 'chengji');
+INSERT INTO `django_content_type` VALUES (8, 'apps', 'grade');
+INSERT INTO `django_content_type` VALUES (13, 'apps', 'mistakes');
+INSERT INTO `django_content_type` VALUES (12, 'apps', 'student');
+INSERT INTO `django_content_type` VALUES (9, 'apps', 'teacher');
+INSERT INTO `django_content_type` VALUES (11, 'apps', 'timu');
+INSERT INTO `django_content_type` VALUES (10, 'apps', 'xueqi');
 INSERT INTO `django_content_type` VALUES (3, 'auth', 'group');
 INSERT INTO `django_content_type` VALUES (2, 'auth', 'permission');
 INSERT INTO `django_content_type` VALUES (4, 'auth', 'user');
@@ -1262,30 +1338,29 @@ CREATE TABLE `django_migrations`  (
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of django_migrations
 -- ----------------------------
-INSERT INTO `django_migrations` VALUES (1, 'contenttypes', '0001_initial', '2021-04-12 15:22:14.040408');
-INSERT INTO `django_migrations` VALUES (2, 'auth', '0001_initial', '2021-04-12 15:22:14.315424');
-INSERT INTO `django_migrations` VALUES (3, 'admin', '0001_initial', '2021-04-12 15:22:15.262495');
-INSERT INTO `django_migrations` VALUES (4, 'admin', '0002_logentry_remove_auto_add', '2021-04-12 15:22:15.533515');
-INSERT INTO `django_migrations` VALUES (5, 'admin', '0003_logentry_add_action_flag_choices', '2021-04-12 15:22:15.544516');
-INSERT INTO `django_migrations` VALUES (6, 'apps', '0001_initial', '2021-04-12 15:22:15.705529');
-INSERT INTO `django_migrations` VALUES (7, 'contenttypes', '0002_remove_content_type_name', '2021-04-12 15:22:16.196564');
-INSERT INTO `django_migrations` VALUES (8, 'auth', '0002_alter_permission_name_max_length', '2021-04-12 15:22:16.326574');
-INSERT INTO `django_migrations` VALUES (9, 'auth', '0003_alter_user_email_max_length', '2021-04-12 15:22:16.497586');
-INSERT INTO `django_migrations` VALUES (10, 'auth', '0004_alter_user_username_opts', '2021-04-12 15:22:16.513590');
-INSERT INTO `django_migrations` VALUES (11, 'auth', '0005_alter_user_last_login_null', '2021-04-12 15:22:16.620597');
-INSERT INTO `django_migrations` VALUES (12, 'auth', '0006_require_contenttypes_0002', '2021-04-12 15:22:16.626596');
-INSERT INTO `django_migrations` VALUES (13, 'auth', '0007_alter_validators_add_error_messages', '2021-04-12 15:22:16.639598');
-INSERT INTO `django_migrations` VALUES (14, 'auth', '0008_alter_user_username_max_length', '2021-04-12 15:22:16.754606');
-INSERT INTO `django_migrations` VALUES (15, 'auth', '0009_alter_user_last_name_max_length', '2021-04-12 15:22:16.876615');
-INSERT INTO `django_migrations` VALUES (16, 'auth', '0010_alter_group_name_max_length', '2021-04-12 15:22:17.017625');
-INSERT INTO `django_migrations` VALUES (17, 'auth', '0011_update_proxy_permissions', '2021-04-12 15:22:17.031627');
-INSERT INTO `django_migrations` VALUES (18, 'sessions', '0001_initial', '2021-04-12 15:22:17.076630');
-INSERT INTO `django_migrations` VALUES (19, 'apps', '0002_auto_20210418_2045', '2021-04-18 12:45:51.786977');
+INSERT INTO `django_migrations` VALUES (1, 'contenttypes', '0001_initial', '2021-05-24 08:09:18.042324');
+INSERT INTO `django_migrations` VALUES (2, 'auth', '0001_initial', '2021-05-24 08:09:18.325346');
+INSERT INTO `django_migrations` VALUES (3, 'admin', '0001_initial', '2021-05-24 08:09:19.267418');
+INSERT INTO `django_migrations` VALUES (4, 'admin', '0002_logentry_remove_auto_add', '2021-05-24 08:09:19.526442');
+INSERT INTO `django_migrations` VALUES (5, 'admin', '0003_logentry_add_action_flag_choices', '2021-05-24 08:09:19.554442');
+INSERT INTO `django_migrations` VALUES (6, 'apps', '0001_initial', '2021-05-24 08:09:19.942469');
+INSERT INTO `django_migrations` VALUES (7, 'contenttypes', '0002_remove_content_type_name', '2021-05-24 08:09:20.944546');
+INSERT INTO `django_migrations` VALUES (8, 'auth', '0002_alter_permission_name_max_length', '2021-05-24 08:09:21.059553');
+INSERT INTO `django_migrations` VALUES (9, 'auth', '0003_alter_user_email_max_length', '2021-05-24 08:09:21.178563');
+INSERT INTO `django_migrations` VALUES (10, 'auth', '0004_alter_user_username_opts', '2021-05-24 08:09:21.195563');
+INSERT INTO `django_migrations` VALUES (11, 'auth', '0005_alter_user_last_login_null', '2021-05-24 08:09:21.310573');
+INSERT INTO `django_migrations` VALUES (12, 'auth', '0006_require_contenttypes_0002', '2021-05-24 08:09:21.318573');
+INSERT INTO `django_migrations` VALUES (13, 'auth', '0007_alter_validators_add_error_messages', '2021-05-24 08:09:21.335574');
+INSERT INTO `django_migrations` VALUES (14, 'auth', '0008_alter_user_username_max_length', '2021-05-24 08:09:21.469585');
+INSERT INTO `django_migrations` VALUES (15, 'auth', '0009_alter_user_last_name_max_length', '2021-05-24 08:09:21.617595');
+INSERT INTO `django_migrations` VALUES (16, 'auth', '0010_alter_group_name_max_length', '2021-05-24 08:09:21.737607');
+INSERT INTO `django_migrations` VALUES (17, 'auth', '0011_update_proxy_permissions', '2021-05-24 08:09:21.759608');
+INSERT INTO `django_migrations` VALUES (18, 'sessions', '0001_initial', '2021-05-24 08:09:21.821611');
 
 -- ----------------------------
 -- Table structure for django_session
@@ -1302,9 +1377,6 @@ CREATE TABLE `django_session`  (
 -- ----------------------------
 -- Records of django_session
 -- ----------------------------
-INSERT INTO `django_session` VALUES ('6izla6u57w04h75wnncftqj6m5yuik85', 'OGYwMTEzZDMyYjI0MDk4N2VmNjE0NmU3MjlkY2U4NTJkNGE0NGNlNTqABJWeAwAAAAAAAH2UKIwBc5SMFWRqYW5nby5kYi5tb2RlbHMuYmFzZZSMDm1vZGVsX3VucGlja2xllJOUjARhcHBzlIwHU3R1ZGVudJSGlIWUUpR9lCiMBl9zdGF0ZZRoAowKTW9kZWxTdGF0ZZSTlCmBlH2UKIwGYWRkaW5nlImMAmRilIwHZGVmYXVsdJR1YowCaWSUSwGMBm51bWJlcpSMBDIwMDGUjARuYW1llIwG5byg5LiJlIwHZ19pZF9pZJRLAYwPX2RqYW5nb192ZXJzaW9ulIwDMi4ylHVijApjYWxzc19saXN0lF2UKIwGUHl0aG9ulIwBQ5SMAkMjlIwDQysrlIwESmF2YZSMCkphdmFTY3JpcHSUjANQSFCUjANWQlOUjAnmmJPor63oqICUZYwFZmlyc3SUXZQoS0lLYEskS1VLVEs/S0lLB0sIZYwGc2Vjb25klF2UKEs4Sz5LXktTSzhLVks8SwhLE2WMBXRoaXJklF2UKEsBS19LWksSS0FLNUsVSytLN2WMBmZvdXJ0aJRdlChLOEsTS0NLMUtYS2RLVUsvSwZljApzY29yZV9saXN0lF2UKF2UKEtJS2BLJEtVS1RLP0tJSwdLCGVdlChLOEs+S15LU0s4S1ZLPEsISxNlXZQoSwFLX0taSxJLQUs1SxVLK0s3ZV2UKEs4SxNLQ0sxS1hLZEtVSy9LBmVljAhzdWJfZGljdJR9lCiMBXN1Yl8xlF2UKEtJSzhLAUs4Sy1LT0sDSwpljAVzdWJfMpRdlChLYEs+S19LE0sSS1hLJEtNZYwFc3ViXzOUXZQoSyRLXktaS0NLGUtXS0hLImWMBXN1Yl80lF2UKEtVS1NLEksxSxdLD0tkS0ZljAVzdWJfNZRdlChLVEs4S0FLWEtJSyBLIUtQZYwFc3ViXzaUXZQoSz9LVks1S2RLBkslSw9LQGWMBXN1Yl83lF2UKEtJSzxLFUtVSwRLVEs/SzxljAVzdWJfOJRdlChLB0sISytLL0tBS0tLYEtCZYwFc3ViXzmUXZQoSwhLE0s3SwZLDUsuSxlLT2V1jAF0lGgEaAWMB1RlYWNoZXKUhpSFlFKUfZQojAZfc3RhdGWUaA0pgZR9lChoEIloEYwHZGVmYXVsdJR1YowCaWSUSwGMBm51bWJlcpSMCDIwMDEwMTAxlIwEbmFtZZSMCeadjuiAgeW4iJSMD19kamFuZ29fdmVyc2lvbpSMAzIuMpR1YnUu', '2021-05-05 10:33:58.596204');
-INSERT INTO `django_session` VALUES ('axqxixfogx5fvemumdj21ml6h5y5toh5', 'MTA2NTdiODM5YmI3NGJmMzJmY2E5YjlkZGU1NmMzMDk1NGU3NDMwNzqABJUeAgAAAAAAAH2UKIwBdJSMFWRqYW5nby5kYi5tb2RlbHMuYmFzZZSMDm1vZGVsX3VucGlja2xllJOUjARhcHBzlIwHVGVhY2hlcpSGlIWUUpR9lCiMBl9zdGF0ZZRoAowKTW9kZWxTdGF0ZZSTlCmBlH2UKIwGYWRkaW5nlImMAmRilIwHZGVmYXVsdJR1YowCaWSUSwGMBm51bWJlcpSMCDIwMDEwMTAxlIwEbmFtZZSMCeadjuiAgeW4iJSMD19kamFuZ29fdmVyc2lvbpSMAzIuMpR1YowBc5RoBGgFjAdTdHVkZW50lIaUhZRSlH2UKIwGX3N0YXRllGgNKYGUfZQoaBCJaBGMB2RlZmF1bHSUdWKMAmlklEsBjAZudW1iZXKUjAQyMDAxlIwEbmFtZZSMBuW8oOS4iZSMB2dfaWRfaWSUSwGMD19kamFuZ29fdmVyc2lvbpSMAzIuMpR1YowIc3ViX2RpY3SUfZQojAVzdWJfMZRdlChLSUs4SwFLOGWMBXN1Yl8ylF2UKEtgSz5LX0sTZYwFc3ViXzOUXZQoSyRLXktaS0NljAVzdWJfNJRdlChLVUtTSxJLMWWMBXN1Yl81lF2UKEtUSzhLQUtYZYwFc3ViXzaUXZQoSz9LVks1S2RljAVzdWJfN5RdlChLSUs8SxVLVWWMBXN1Yl84lF2UKEsHSwhLK0svZYwFc3ViXzmUXZQoSwhLE0s3SwZldXUu', '2021-06-02 00:54:30.155232');
-INSERT INTO `django_session` VALUES ('lr6qy9skoym9oie0vk6fdbj6dil7khho', 'NTJjMzI3ZjZhZDZkM2YwOGNiMWZkNTdhMjI4MTBjNWVmODcyN2EwMTqABJVmAgAAAAAAAH2UKIwBc5SMFWRqYW5nby5kYi5tb2RlbHMuYmFzZZSMDm1vZGVsX3VucGlja2xllJOUjARhcHBzlIwHU3R1ZGVudJSGlIWUUpR9lCiMBl9zdGF0ZZRoAowKTW9kZWxTdGF0ZZSTlCmBlH2UKIwGYWRkaW5nlImMAmRilIwHZGVmYXVsdJR1YowCaWSUSwGMBm51bWJlcpSMBDIwMDGUjARuYW1llIwG5byg5LiJlIwHZ19pZF9pZJRLAYwPX2RqYW5nb192ZXJzaW9ulIwDMi4ylHVijAhzdWJfZGljdJR9lCiMBXN1Yl8xlF2UKEtJSzhLAUs4Sy1LT0sDSwpljAVzdWJfMpRdlChLYEs+S19LE0sSS1hLJEtNZYwFc3ViXzOUXZQoSyRLXktaS0NLGUtXS0hLImWMBXN1Yl80lF2UKEtVS1NLEksxSxdLD0tkS0ZljAVzdWJfNZRdlChLVEs4S0FLWEtJSyBLIUtQZYwFc3ViXzaUXZQoSz9LVks1S2RLBkslSw9LQGWMBXN1Yl83lF2UKEtJSzxLFUtVSwRLVEs/SzxljAVzdWJfOJRdlChLB0sISytLL0tBS0tLYEtCZYwFc3ViXzmUXZQoSwhLE0s3SwZLDUsuSxlLT2V1jAF0lGgEaAWMB1RlYWNoZXKUhpSFlFKUfZQojAZfc3RhdGWUaA0pgZR9lChoEIloEYwHZGVmYXVsdJR1YowCaWSUSwGMBm51bWJlcpSMCDIwMDEwMTAxlIwEbmFtZZSMCeadjuiAgeW4iJSMD19kamFuZ29fdmVyc2lvbpSMAzIuMpR1YnUu', '2021-05-13 06:43:06.594194');
-INSERT INTO `django_session` VALUES ('vl3zjq3dy9omx372ql4lanrzpxdv0kqm', 'ZTA1MWZhNTNjMjU4N2Y0ODBmYTE5OGYwOGJkOTAzODZjODdlMDllMTqABJUeAgAAAAAAAH2UKIwBc5SMFWRqYW5nby5kYi5tb2RlbHMuYmFzZZSMDm1vZGVsX3VucGlja2xllJOUjARhcHBzlIwHU3R1ZGVudJSGlIWUUpR9lCiMBl9zdGF0ZZRoAowKTW9kZWxTdGF0ZZSTlCmBlH2UKIwGYWRkaW5nlImMAmRilIwHZGVmYXVsdJR1YowCaWSUSwGMBm51bWJlcpSMBDIwMDGUjARuYW1llIwG5byg5LiJlIwHZ19pZF9pZJRLAYwPX2RqYW5nb192ZXJzaW9ulIwDMi4ylHVijAhzdWJfZGljdJR9lCiMBXN1Yl8xlF2UKEtJSzhLAUs4ZYwFc3ViXzKUXZQoS2BLPktfSxNljAVzdWJfM5RdlChLJEteS1pLQ2WMBXN1Yl80lF2UKEtVS1NLEksxZYwFc3ViXzWUXZQoS1RLOEtBS1hljAVzdWJfNpRdlChLP0tWSzVLZGWMBXN1Yl83lF2UKEtJSzxLFUtVZYwFc3ViXziUXZQoSwdLCEsrSy9ljAVzdWJfOZRdlChLCEsTSzdLBmV1jAF0lGgEaAWMB1RlYWNoZXKUhpSFlFKUfZQojAZfc3RhdGWUaA0pgZR9lChoEIloEYwHZGVmYXVsdJR1YowCaWSUSwGMBm51bWJlcpSMCDIwMDEwMTAxlIwEbmFtZZSMCeadjuiAgeW4iJSMD19kamFuZ29fdmVyc2lvbpSMAzIuMpR1YnUu', '2021-05-19 10:10:38.611034');
+INSERT INTO `django_session` VALUES ('be0hns75wsfm9inwfqcqsrt6oxyh5oec', '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', '2021-06-08 12:26:06.858981');
 
 SET FOREIGN_KEY_CHECKS = 1;
